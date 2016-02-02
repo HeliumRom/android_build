@@ -182,11 +182,6 @@ KERNEL_HEADERS_INSTALL_STAMP := $(KERNEL_OUT)/.headers_install_stamp
 KERNEL_MODULES_INSTALL := system
 KERNEL_MODULES_OUT := $(TARGET_OUT)/lib/modules
 
-ifeq ($(KERNEL_TOOLCHAIN),)
-KERNEL_TOOLCHAIN := $(ARM_EABI_TOOLCHAIN)
-endif
-TARGET_TC_KERNEL := $(TARGET_SM_KERNEL)
-
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := $(strip $(TARGET_KERNEL_CROSS_COMPILE_PREFIX))
 ifeq ($(TARGET_KERNEL_CROSS_COMPILE_PREFIX),)
 ifeq ($(KERNEL_TOOLCHAIN_PREFIX),)
@@ -210,18 +205,8 @@ ifneq ($(USE_CCACHE),)
     ccache := $(strip $(wildcard $(ccache)))
 endif
 
-ifneq ($(TARGET_TC_KERNEL),)
-ifeq ($(HOST_OS),darwin)
-KERNEL_CROSS_COMPILE := CROSS_COMPILE="$(ANDROID_BUILD_TOP)/prebuilts/gcc/darwin-x86/arm/arm-eabi-$(TARGET_TC_KERNEL)/bin/arm-eabi-"
-else
-KERNEL_CROSS_COMPILE := CROSS_COMPILE="$(ANDROID_BUILD_TOP)/prebuilts/gcc/linux-x86/arm/arm-eabi-$(TARGET_TC_KERNEL)/bin/arm-eabi-"  
-endif
-else
-$(error   ----------------- KERNEL TOOLCHAIN WRONG! -------------------------)
-endif
-else
 KERNEL_CROSS_COMPILE := CROSS_COMPILE="$(ccache) $(KERNEL_TOOLCHAIN_PATH)"
-endif
+ccache =
 
 $(info   -------------------------------------------------------)
 $(info   ----------------- KERNEL INFO -------------------------)
