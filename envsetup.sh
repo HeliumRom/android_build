@@ -50,6 +50,9 @@ EOF
     done | column
 }
 
+# Load ANSI color palette
+. ./vendor/cmremix/tools/colors
+
 # Get the value of a build variable as an absolute path.
 function get_abs_build_var()
 {
@@ -153,7 +156,6 @@ function setpaths()
     # defined in core/config.mk
     targetandgccversion=$(get_build_var TARGET_AND_GCC_VERSION)
     targetgccversion2=$(get_build_var 2ND_TARGET_GCC_VERSION)
-    targetlegacygccversion=$(get_build_var TARGET_LEGACY_GCC_VERSION)
     export TARGET_AND_GCC_VERSION=$targetandgccversion
 
     # defined in core/config.mk
@@ -165,13 +167,13 @@ function setpaths()
     export ANDROID_TOOLCHAIN_2ND_ARCH=
     local ARCH=$(get_build_var TARGET_ARCH)
     case $ARCH in
-        x86) toolchaindir=x86/x86_64-linux-android-$targetandgccversion/bin
+        x86) toolchaindir=x86/x86_64-linux-android-$targetgccversion/bin
             ;;
         x86_64) toolchaindir=x86/x86_64-linux-android-$targetgccversion/bin
             ;;
         arm) toolchaindir=arm/arm-linux-androideabi-$targetandgccversion/bin
             ;;
-        arm64) toolchaindir=aarch64/aarch64-linux-android-$targetgccversion/bin;
+        arm64) toolchaindir=aarch64/aarch64-linux-android-$targetandgccversion/bin;
                toolchaindir2=arm/arm-linux-androideabi-$targetgccversion2/bin
             ;;
         mips|mips64) toolchaindir=mips/mips64el-linux-android-$targetgccversion/bin
@@ -818,6 +820,7 @@ function gettop
             fi
         fi
     fi
+  export ANDROID_BUILD_TOP=$T
 }
 
 # Return driver for "make", if any (eg. static analyzer)
@@ -2186,10 +2189,10 @@ function repolastsync() {
 function reposync() {
     case `uname -s` in
         Darwin)
-            repo sync -j 4 "$@"
+            repo sync --force-sync -j 4 "$@"
             ;;
         *)
-            schedtool -B -n 1 -e ionice -n 1 `which repo` sync -j 4 "$@"
+            schedtool -B -n 1 -e ionice -n 1 `which repo` sync --force-sync -j 4 "$@"
             ;;
     esac
 }
@@ -2434,18 +2437,29 @@ function mk_timer()
     fi
     echo
     if [ $ret -eq 0 ] ; then
-        printf "${color_success}#### make completed successfully "
+        echo -n -e "${color_success}#### ${bldgrn}make completed successfully${rst} "
     else
-        printf "${color_failed}#### make failed to build some targets "
+        echo -n -e "${color_failed}#### ${bldred}make failed to build some targets${rst} "
     fi
     if [ $hours -gt 0 ] ; then
-        printf "(%02g:%02g:%02g (hh:mm:ss))" $hours $mins $secs
+        printf "${bldcya}(%02g:%02g:%02g (hh:mm:ss))${rst}" $hours $mins $secs
     elif [ $mins -gt 0 ] ; then
-        printf "(%02g:%02g (mm:ss))" $mins $secs
+        printf "${bldcya}(%02g:%02g (mm:ss))${rst}" $mins $secs
     elif [ $secs -gt 0 ] ; then
-        printf "(%s seconds)" $secs
+        printf "${bldcya}(%s seconds)${rst}" $secs
     fi
-    printf " ####${color_reset}\n\n"
+    echo -e " ####${color_reset}"
+    echo
+    if [ $ret -eq 0 ] ; then
+        for i in "$@"; do
+            case $i in
+                bacon|bootimage|otapackage|recoveryimage|systemimage)
+                    . ./vendor/cmremix/tools/res/cmremix
+                    ;;
+                *)
+            esac
+        done
+    fi
     return $ret
 }
 
