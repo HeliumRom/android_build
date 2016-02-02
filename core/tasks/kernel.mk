@@ -13,6 +13,9 @@
 # limitations under the License.
 
 # Android makefile to build kernel as a part of Android Build
+$(info   -------------------------------------------------------)
+$(info   ---------------- KERNEL.MK START ----------------------)
+$(info   -------------------------------------------------------)
 
 TARGET_AUTO_KDIR := $(shell echo $(TARGET_DEVICE_DIR) | sed -e 's/^device/kernel/g')
 
@@ -205,6 +208,15 @@ endif
 KERNEL_CROSS_COMPILE := CROSS_COMPILE="$(ccache) $(KERNEL_TOOLCHAIN_PATH)"
 ccache =
 
+$(info   -------------------------------------------------------)
+$(info   ----------------- KERNEL INFO -------------------------)
+$(info   -------------------------------------------------------)
+$(info   KERNEL_TOOLCHAIN_PREFIX=$(KERNEL_TOOLCHAIN_PREFIX))
+$(info   KERNEL_TOOLCHAIN=$(KERNEL_TOOLCHAIN))
+$(info   KERNEL_TOOLCHAIN_PATH=$(KERNEL_TOOLCHAIN_PATH))
+$(info   KERNEL_CROSS_COMPILE=$(KERNEL_CROSS_COMPILE))
+$(info   -------------------------------------------------------)
+
 define mv-modules
     mdpath=`find $(KERNEL_MODULES_OUT) -type f -name modules.order`;\
     if [ "$$mdpath" != "" ];then\
@@ -334,3 +346,7 @@ $(file) : $(KERNEL_BIN) | $(ACP)
 
 ALL_PREBUILT += $(INSTALLED_KERNEL_TARGET)
 endif
+
+$(info   -------------------------------------------------------)
+$(info   ---------------- KERNEL.MK END ------------------------)
+$(info   -------------------------------------------------------)
