@@ -118,6 +118,7 @@ ifeq ($(strip $(GCC_O3)),true)
 $(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb -Os -DNDEBUG -pipe -fomit-frame-pointer -fno-strict-aliasing -fno-tree-vectorize -fno-inline-functions -fno-unswitch-loops -ffunction-sections -fdata-sections -Wno-unused-parameter -Wno-unused-but-set-variable -Wno-maybe-uninitialized -Wno-clobbered -Wno-strict-overflow $(call cc-option,$(-funsafe-loop-optimizations,-funroll-loops,-ftree-loop-distribution,-fsection-anchors,-ftree-loop-im,-ftree-loop-ivcanon,-ffunction-sections,-frename-registers,-frerun-cse-after-loop,-fgcse-las,-fgcse-sm,-fweb,-ffp-contract=fast))
 else
 $(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb -Os -fomit-frame-pointer -fno-strict-aliasing
+endif
 
 # Set FORCE_ARM_DEBUGGING to "true" in your buildspec.mk
 # or in your environment to force a full arm build, even for
