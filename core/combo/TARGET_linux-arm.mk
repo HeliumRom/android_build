@@ -108,14 +108,14 @@ endif
 $(combo_2nd_arch_prefix)TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 
 ifeq ($(strip $(GCC_O3)),true)
-$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS := -O3 -fstrict-aliasing -funswitch-loops -fno-tree-vectorize -fno-inline-functions -Wstrict-aliasing=3 -Werror=strict-aliasing -fgcse-after-reload -fno-ipa-cp-clone -fno-vect-cost-model -Wnoerror=unused-parameter -Wno-error=unused-but-set-variable-fstrict-aliasing -funswitch-loops -fno-tree-vectorize -fno-inline-functions -Wstrict-aliasing=3 -Werror=strict-aliasing fgcse-after-reload fno-ipa-cp-clone fno-vect-cost-model Wno-error=unused-parameter -Wno-error=unused-but-set-variable
+$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS := -O3 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops
 else
 $(combo_2nd_arch_prefix)TARGET_arm_CFLAGS := -O2 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops
 endif
 
 # Modules can choose to compile some source as thumb.
 ifeq ($(strip $(GCC_O3)),true)
-$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb -Os -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -fno-tree-vectorize -fno-inline-functions -Wstrict-aliasing=3 -Werror=strict-aliasing -fgcse-after-reload -fno-ipa-cp-clone -fno-vect-cost-model -Wnoerror=unused-parameter -Wno-error=unused-but-set-variable-fstrict-aliasing -funswitch-loops -fno-tree-vectorize -fno-inline-functions -Wstrict-aliasing=3 -Werror=strict-aliasing fgcse-after-reload fno-ipa-cp-clone fno-vect-cost-model Wno-error=unused-parameter -Wno-error=unused-but-set-variable
+$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb -O3 -fomit-frame-pointer -fno-strict-aliasing
 else
 $(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb -Os -fomit-frame-pointer -fno-strict-aliasing
 endif
@@ -130,13 +130,8 @@ endif
 # with -mlong-calls.  When built at -O0, those libraries are
 # too big for a thumb "BL <label>" to go from one end to the other.
 ifeq ($(FORCE_ARM_DEBUGGING),true)
-ifeq ($(strip $(GCC_O3)),true)
-$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS += -fno-omit-frame-pointer -fstrict-aliasing
-$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS += -marm -fno-omit-frame-pointer -fstrict-aliasing
-else
 $(combo_2nd_arch_prefix)TARGET_arm_CFLAGS += -fno-omit-frame-pointer -fno-strict-aliasing
 $(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS += -marm -fno-omit-frame-pointer
-endif
 endif
 
 android_config_h := $(call select-android-config-h,linux-arm)
@@ -162,7 +157,7 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += \
 # into no-op in some builds while mesg is defined earlier. So we explicitly
 # disable "-Wunused-but-set-variable" here.
 ifneq ($(filter 4.6 4.6.% 4.7 4.7.% 4.8 4.9, $($(combo_2nd_arch_prefix)TARGET_AND_GCC_VERSION)),)
-$(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += -Wno-unused-but-set-variable -fstrict-aliasing -fno-builtin-sin \
+$(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += fno-builtin-sin \
 			-fno-strict-volatile-bitfields
 endif
 
@@ -193,18 +188,10 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_LDFLAGS += $(BOARD_GLOBAL_LDFLAGS)
 
 $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += -mthumb-interwork
 
-ifeq ($(strip $(GCC_O3)),true)
-$(combo_2nd_arch_prefix)TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden -fstrict-aliasing
-else
 $(combo_2nd_arch_prefix)TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
-endif
 
 # More flags/options can be added here
-ifeq ($(strip $(GCC_O3)),true)
-$(combo_2nd_arch_prefix)TARGET_RELEASE_CFLAGS := -DNDEBUG -g -Wstrict-aliasing=3 -fgcse-after-reload -frerun-cse-after-loop -frename-registers -Werror=strict-aliasing -fstrict-aliasing -fno-ipa-cp-clone -fno-vect-cost-model -Wno-error=unused-parameter -Wno-error=unused-but-set-variable
-else
-$(combo_2nd_arch_prefix)TARGET_RELEASE_CFLAGS := -DNDEBUG -g -Wstrict-aliasing=2 -fgcse-after-reload -frerun-cse-after-loop -frename-registers
-endif
+$(combo_2nd_arch_prefix)TARGET_RELEASE_CFLAGS := -DNDEBUG -Wstrict-aliasing=2 -fgcse-after-reload -frerun-cse-after-loop -frename-registers
 
 libc_root := bionic/libc
 libm_root := bionic/libm
