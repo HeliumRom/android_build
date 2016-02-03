@@ -100,6 +100,7 @@ CLANG_CONFIG_UNKNOWN_CFLAGS := \
   -funsafe-loop-optimizations \
   -fweb \
   -funswitch-loops \
+  -fno-unswitch-loops \
   -fno-tree-sra \
   -fno-canonical-system-headers \
   -mfpu=neon-vfpv4
