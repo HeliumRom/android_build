@@ -83,7 +83,26 @@ CLANG_CONFIG_UNKNOWN_CFLAGS := \
   -Wno-unused-local-typedefs \
   -Wunused-but-set-parameter \
   -Wunused-but-set-variable \
-  -fdiagnostics-color
+  -fdiagnostics-color \
+  -mvectorize-with-neon-double \
+  -mvectorize-with-neon-quad \
+  -fgcse-after-reload \
+  -fgcse-las \
+  -fgcse-sm \
+  -fipa-pta \
+  -fmodulo-sched \
+  -fmodulo-sched-allow-regmoves \
+  -frerun-cse-after-loop \
+  -frename-registers \
+  -fsection-anchors \
+  -ftree-loop-im \
+  -ftree-loop-ivcanon \
+  -funsafe-loop-optimizations \
+  -fweb \
+  -funswitch-loops \
+  -fno-tree-sra \
+  -fno-canonical-system-headers \
+  -mfpu=neon-vfpv4
 
 # Clang flags for all host rules
 CLANG_CONFIG_HOST_EXTRA_ASFLAGS :=
