@@ -103,6 +103,8 @@ CLANG_CONFIG_UNKNOWN_CFLAGS := \
   -fno-unswitch-loops \
   -fno-tree-sra \
   -fno-canonical-system-headers \
+  -fivopts \
+  -ftracer \
   -mfpu=neon-vfpv4
 
 # Clang flags for all host rules
