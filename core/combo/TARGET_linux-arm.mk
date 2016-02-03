@@ -157,7 +157,7 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += \
 # into no-op in some builds while mesg is defined earlier. So we explicitly
 # disable "-Wunused-but-set-variable" here.
 ifneq ($(filter 4.6 4.6.% 4.7 4.7.% 4.8 4.9, $($(combo_2nd_arch_prefix)TARGET_AND_GCC_VERSION)),)
-$(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += fno-builtin-sin \
+$(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += -fno-builtin-sin \
 			-fno-strict-volatile-bitfields
 endif
 
