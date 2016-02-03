@@ -183,8 +183,8 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_LDFLAGS += \
 			$(arch_variant_ldflags)
 
 ifeq ($(strip $(GCC_O3)),true)
-$(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += -O3 -fgcse-las -fgcse-sm -fipa-pta -fivopts -fomit-frame-pointer -frename-registers -fsection-anchors -ftracer -ftree-loop-im -ftree-loop-ivcanon -funsafe-loop-optimizations -funswitch-loops -fweb -Wno-error=array-bounds -Wno-error=clobbered -Wno-error=maybe-uninitialized -Wno-error=strict-overflow
-$(combo_2nd_arch_prefix)TARGET_GLOBAL_CPPFLAGS += -O3 -fgcse-las -fgcse-sm -fipa-pta -fivopts -fomit-frame-pointer -frename-registers -fsection-anchors -ftracer -ftree-loop-im -ftree-loop-ivcanon -funsafe-loop-optimizations -funswitch-loops -fweb -Wno-error=array-bounds -Wno-error=clobbered -Wno-error=maybe-uninitialized -Wno-error=strict-overflow
+$(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += -O3 -fgcse-las -fgcse-sm -fipa-pta -fomit-frame-pointer -frename-registers -fsection-anchors -ftree-loop-im -ftree-loop-ivcanon -funsafe-loop-optimizations -funswitch-loops -fweb -Wno-error=array-bounds -Wno-error=clobbered -Wno-error=maybe-uninitialized -Wno-error=strict-overflow
+$(combo_2nd_arch_prefix)TARGET_GLOBAL_CPPFLAGS += -O3 -fgcse-las -fgcse-sm -fipa-pta -fomit-frame-pointer -frename-registers -fsection-anchors h-ftree-loop-im -ftree-loop-ivcanon -funsafe-loop-optimizations -funswitch-loops -fweb -Wno-error=array-bounds -Wno-error=clobbered -Wno-error=maybe-uninitialized -Wno-error=strict-overflow
 $(combo_2nd_arch_prefix)TARGET_GLOBAL_LDFLAGS += -Wl,--sort-common
 endif
 
