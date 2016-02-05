@@ -57,6 +57,7 @@ DISABLE_POLLY_arm := \
   libsparse \
   libfuse \
   hostapd \
+  libF77blas \
   libfuse_static 
 DISABLE_POLLY_arm64 := \
   libpng \
