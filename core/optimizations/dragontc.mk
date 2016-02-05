@@ -55,6 +55,7 @@ DISABLE_POLLY_arm := \
   dhcpcd \
   libsparse \
   libfuse \
+  hostapd \
   libfuse_static 
 DISABLE_POLLY_arm64 := \
   libpng \
