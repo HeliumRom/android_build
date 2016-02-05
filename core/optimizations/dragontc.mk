@@ -31,6 +31,7 @@ endif
 # Disable modules that don't work with DragonTC. Split up by arch.
 DISABLE_DTC_arm := \
   libvixl \
+  libLLVM
 DISABLE_DTC_arm64 :=
 
 # Set DISABLE_DTC based on arch
@@ -58,7 +59,6 @@ DISABLE_POLLY_arm := \
   libfuse \
   hostapd \
   libF77blas \
-  libLLVM \
   libfuse_static 
 DISABLE_POLLY_arm64 := \
   libpng \
