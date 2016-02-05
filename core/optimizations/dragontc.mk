@@ -15,8 +15,10 @@
 # Polly flags for use with Clang
 POLLY := -mllvm -polly \
   -mllvm -polly-parallel -lgomp \
+  -mllvm -polly-parallel-force \
   -mllvm -polly-allow-nonaffine=1\
   -mllvm -polly-ast-detect-parallel \
+  -mllvm -polly-no-early-exit \
   -mllvm -polly-vectorizer=polly \
   -mllvm -polly-opt-fusion=max \
   -mllvm -polly-opt-maximize-bands=yes \
@@ -46,7 +48,11 @@ ENABLE_DTC := \
   $(LOCAL_ENABLE_DTC)
 
 # Disable modules that dont work with Polly. Split up by arch.
-DISABLE_POLLY_arm := 
+DISABLE_POLLY_arm := \
+  libpng \
+  libminivold \
+  libfuse \
+  libfuse_static 
 DISABLE_POLLY_arm64 := \
   libpng \
   libfuse \
