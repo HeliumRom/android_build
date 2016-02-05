@@ -108,9 +108,9 @@ endif
 $(combo_2nd_arch_prefix)TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 
 ifeq ($(strip $(GCC_O3)),true)
-$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS := -O3 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops
+$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS := -O3 -fomit-frame-pointer -funswitch-loops
 else
-$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS := -O2 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops
+$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS := -O2 -fomit-frame-pointer -funswitch-loops
 endif
 
 # Modules can choose to compile some source as thumb.
@@ -118,6 +118,10 @@ ifeq ($(strip $(GCC_O3)),true)
 $(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb -O3 -fomit-frame-pointer -fno-strict-aliasing
 else
 $(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb -Os -fomit-frame-pointer -fno-strict-aliasing
+endif
+
+ifeq ($(strip $(STRICT_ALIASING)),true)
+$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS += -fstrict-aliasing -Wstrict-aliasing=3 -Werror=strict-aliasing
 endif
 
 # Set FORCE_ARM_DEBUGGING to "true" in your buildspec.mk
@@ -159,6 +163,12 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += \
 ifneq ($(filter 4.6 4.6.% 4.7 4.7.% 4.8 4.9, $($(combo_2nd_arch_prefix)TARGET_AND_GCC_VERSION)),)
 $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += -fno-builtin-sin \
 			-fno-strict-volatile-bitfields
+endif
+
+# Currently building with GCC 5.x yields to false positives errors
+# This ensures the build is not hatled on the following errors
+ifneq ($(filter $($(combo_2nd_arch_prefix)TARGET_GCC_VERSION), 5.1 5.1.%),)
+TARGET_GLOBAL_CFLAGS += -Wno-array-bounds -Wno-strict-overflowLLVM_PREBUILTS_VERSION := 3.6
 endif
 
 # This is to avoid the dreaded warning compiler message:
