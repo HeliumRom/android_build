@@ -31,9 +31,14 @@ else
 endif
 
 ### Begin HeliumRom optimizations ###
-# Include DragonTC Optimizations
+# DragonTC Optimizations
  ifeq ($(USE_DTC),true)
    include $(BUILD_SYSTEM)/optimizations/dragontc.mk
+ endif
+
+# GCC Optimizations
+ ifeq ($(GCC_OPTI),true)
+   include $(BUILD_SYSTEM)/optimizations/gcconly.mk
  endif
 
 # Strict Aliasing optimizations
