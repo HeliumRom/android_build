@@ -32,6 +32,7 @@ endif
 DISABLE_DTC_arm := \
   libLLVM \
   libLLVMLinker \
+  libLLVMCodeGen \
   libril \
   libril_static
 DISABLE_DTC_arm64 :=
