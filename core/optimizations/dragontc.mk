@@ -30,7 +30,8 @@ endif
 
 # Disable modules that don't work with DragonTC. Split up by arch.
 DISABLE_DTC_arm := \
-  libLLVM
+  libLLVM \
+  libril
 DISABLE_DTC_arm64 :=
 
 # Set DISABLE_DTC based on arch
