@@ -32,7 +32,8 @@ endif
 DISABLE_DTC_arm := \
   libLLVM \
   libLLVMLinker \
-  libril
+  libril \
+  libril_static
 DISABLE_DTC_arm64 :=
 
 # Set DISABLE_DTC based on arch
