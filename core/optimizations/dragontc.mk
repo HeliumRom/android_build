@@ -61,8 +61,8 @@ DISABLE_POLLY := \
   $(LOCAL_DISABLE_POLLY)
 
 # Include ARM Mode if requested
-ifeq ($(USE_ARM_MODE),true)
-  include $(BUILD_SYSTEM)/arm.mk
+ifeq ($(ARM_MODE),true)
+  include $(BUILD_SYSTEM)/optimizations/arm.mk
 endif
 
 # Make sure that the current module is not blacklisted. Polly is not
