@@ -35,9 +35,7 @@ DISABLE_DTC_arm64 :=
 # Set DISABLE_DTC based on arch
 DISABLE_DTC := \
   $(DISABLE_DTC_$(TARGET_ARCH)) \
-  $(LOCAL_DISABLE_DTC) \
-  libvixl \
-  libLLVM
+  $(LOCAL_DISABLE_DTC)
 
 # Enable DragonTC on GCC modules. Split up by arch.
 ENABLE_DTC_arm :=
@@ -56,9 +54,6 @@ DISABLE_POLLY_arm := \
   libfuse \
   dhcpcd \
   libsparse \
-  libfuse \
-  hostapd \
-  libF77blas \
   libfuse_static 
 DISABLE_POLLY_arm64 := \
   libpng \
