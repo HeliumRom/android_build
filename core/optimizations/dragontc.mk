@@ -18,7 +18,6 @@ POLLY := -mllvm -polly \
   -mllvm -polly-parallel-force \
   -mllvm -polly-allow-nonaffine=1\
   -mllvm -polly-ast-detect-parallel \
-  -mllvm -polly-no-early-exit \
   -mllvm -polly-vectorizer=polly \
   -mllvm -polly-opt-fusion=max \
   -mllvm -polly-opt-maximize-bands=yes \
