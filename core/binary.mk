@@ -30,6 +30,40 @@ else
   endif
 endif
 
+### Begin HeliumRom optimizations ###
+# Include DragonTC Optimizations
+ ifeq ($(USE_DTC),true)
+   include $(BUILD_SYSTEM)/optimizations/dragontc.mk
+ endif
+
+# Strict Aliasing optimizations
+ifeq ($(STRICT_ALIASING),true)
+  include $(BUILD_SYSTEM)/optimizations/strict.mk
+endif
+
+# Graphite  optimizations
+# Do not use graphite on host modules or the clang compiler.
+ifeq ($(GRAPHITE_OPTIMIZATION),true)
+  ifneq ($(strip $(LOCAL_IS_HOST_MODULE)),true)
+    ifneq ($(strip $(LOCAL_CLANG)),true)
+
+    # If it gets this far enable graphite by default from here on out.
+    include $(BUILD_SYSTEM)/optimizations/graphite.mk
+   endif
+ endif
+endif
+
+# CPU Tuning flags
+ifeq ($(CPU_TUNING),true)
+  include $(BUILD_SYSTEM)/optimizations/tune.mk
+endif
+
+# Floop Nest Optimization
+ifeq ($(FLOOP_NEST_OPTIMIZE),true)
+  include $(BUILD_SYSTEM)/optimizations/floop.mk
+endif
+### End HeliumRom optimizations ###
+
 # The following LOCAL_ variables will be modified in this file.
 # Because the same LOCAL_ variables may be used to define modules for both 1st arch and 2nd arch,
 # we can't modify them in place.
