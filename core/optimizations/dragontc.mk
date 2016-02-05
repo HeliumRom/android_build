@@ -59,6 +59,7 @@ DISABLE_POLLY_arm := \
 DISABLE_POLLY_arm64 := \
   libpng \
   libfuse \
+  libkeymaster1 \
   libfuse_static 
 
 # Set DISABLE_POLLY based on arch
