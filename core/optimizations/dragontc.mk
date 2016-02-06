@@ -34,7 +34,8 @@ DISABLE_DTC_arm := \
   libLLVMLinker \
   libLLVMCodeGen \
   libril \
-  libril_static
+  libril_static \
+  librilutils_static
 DISABLE_DTC_arm64 :=
 
 # Set DISABLE_DTC based on arch
