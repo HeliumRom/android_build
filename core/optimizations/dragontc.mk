@@ -24,6 +24,10 @@ POLLY := -mllvm -polly \
   -mllvm -polly-run-dce
 
 # Enable version specific Polly flags.
+ifeq ($(LLVM_PREBUILTS_VERSION),3.7)
+  POLLY += -mllvm -polly-no-early-exit
+endif
+
 ifeq ($(LLVM_PREBUILTS_VERSION),3.8)
   POLLY += -mllvm -polly-position=after-loopopt
 endif
@@ -33,6 +37,17 @@ DISABLE_DTC_arm := \
   libLLVM \
   libLLVMLinker \
   libLLVMCodeGen \
+  libLLVMAnalysis \
+  libLLVMScalarOpts \
+  libLLVMCore \
+  libLLVMInstrumentation \
+  libLLVMipo \
+  libLLVMMC \
+  libLLVMSupport \
+  libLLVMTransformObjCARC \
+  libLLVMVectorize \
+  libgui \
+  libvixl
   libril \
   libril_static \
   librilutils_static
@@ -63,10 +78,6 @@ DISABLE_POLLY_arm := \
   libsparse \
   libfuse_static 
 DISABLE_POLLY_arm64 := \
-  libpng \
-  libfuse \
-  libkeymaster1 \
-  libfuse_static 
 
 # Set DISABLE_POLLY based on arch
 DISABLE_POLLY := \
