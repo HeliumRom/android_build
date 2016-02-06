@@ -47,7 +47,7 @@ DISABLE_DTC_arm := \
   libLLVMTransformObjCARC \
   libLLVMVectorize \
   libgui \
-  libvixl
+  libvixl \
   libril \
   libril_static \
   librilutils_static
