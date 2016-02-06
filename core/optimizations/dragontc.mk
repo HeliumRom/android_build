@@ -50,7 +50,8 @@ DISABLE_DTC_arm := \
   libvixl \
   libril \
   libril_static \
-  librilutils_static
+  librilutils_static \
+  libstagefright_soft_amrwbenc \
 DISABLE_DTC_arm64 :=
 
 # Set DISABLE_DTC based on arch
@@ -72,7 +73,6 @@ DISABLE_POLLY_arm := \
   libpng \
   libF77blas \
   libF77blasV8 \
-  libstagefright_soft_amrwbenc \
   libminivold_static \
   libfuse \
   dhcpcd \
