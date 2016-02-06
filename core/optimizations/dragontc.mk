@@ -54,6 +54,7 @@ ENABLE_DTC := \
 # Disable modules that dont work with Polly. Split up by arch.
 DISABLE_POLLY_arm := \
   libpng \
+  libF77blas \
   libF77blasV8 \
   libminivold_static \
   libfuse \
