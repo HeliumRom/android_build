@@ -72,6 +72,7 @@ DISABLE_POLLY_arm := \
   libpng \
   libF77blas \
   libF77blasV8 \
+  libstagefright_soft_amrwbenc \
   libminivold_static \
   libfuse \
   dhcpcd \
