@@ -57,7 +57,9 @@ DISABLE_DTC_arm := \
   libcompiler_rt-extras \
   libprofile_rt \
   libc++ \
-  libc++_static
+  libc++_static \
+  libc++abi \
+  libunwind_llvm 
 DISABLE_DTC_arm64 :=
 
 # Set DISABLE_DTC based on arch
