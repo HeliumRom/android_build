@@ -115,9 +115,9 @@ endif
 
 # Modules can choose to compile some source as thumb.
 ifeq ($(strip $(GCC_O3)),true)
-$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb -O3 -fomit-frame-pointer
+$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb -O3 -fomit-frame-pointer -fno-strict-aliasing
 else
-$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb -Os -fomit-frame-pointer
+$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb -Os -fomit-frame-pointer -fno-strict-aliasing
 endif
 
 ifeq ($(strip $(STRICT_ALIASING)),true)
@@ -203,7 +203,7 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += -mthumb-interwork
 $(combo_2nd_arch_prefix)TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
 
 # More flags/options can be added here
-$(combo_2nd_arch_prefix)TARGET_RELEASE_CFLAGS := -DNDEBUG -fgcse-after-reload -frerun-cse-after-loop -frename-registers
+$(combo_2nd_arch_prefix)TARGET_RELEASE_CFLAGS := -DNDEBUG -Wstrict-aliasing=2 -fgcse-after-reload -frerun-cse-after-loop -frename-registers
 
 libc_root := bionic/libc
 libm_root := bionic/libm
