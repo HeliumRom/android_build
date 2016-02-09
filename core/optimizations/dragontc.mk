@@ -55,7 +55,9 @@ DISABLE_DTC_arm := \
   libstagefright_amrwbenc \
   libcompiler_rt \
   libcompiler_rt-extras \
-  libprofile_rt
+  libprofile_rt \
+  libc++ \
+  libc++_static
 DISABLE_DTC_arm64 :=
 
 # Set DISABLE_DTC based on arch
