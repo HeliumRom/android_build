@@ -34,8 +34,6 @@ endif
 
 # Disable modules that don't work with DragonTC. Split up by arch.
 DISABLE_DTC_arm := \
-  libc++_static \
-  libc++ \
   libLLVM \
   libLLVMLinker \
   libLLVMCodeGen \
@@ -80,6 +78,8 @@ DISABLE_POLLY_arm := \
   libfuse \
   dhcpcd \
   libsparse \
+  libc++_static \
+  libc++ \
   libfuse_static 
 DISABLE_POLLY_arm64 := \
 
