@@ -7,7 +7,9 @@ WITHOUT_HOST_CLANG := true
 endif
 
 # Set LLVM version for DragonTC
+ifeq ($(USE_DTC),true)
 TARGET_DRAGONTC_VERSION := 3.8
+endif
 ifeq ($(TARGET_DRAGONTC_VERSION),)
 LLVM_PREBUILTS_VERSION := 3.6
 LLVM_PREBUILTS_PATH := prebuilts/clang/$(BUILD_OS)-x86/host/$(LLVM_PREBUILTS_VERSION)/bin
