@@ -59,7 +59,7 @@ ifeq ($(GRAPHITE_OPTIMIZATION),true)
 endif
 
 # CPU Tuning flags
-ifeq ($(CPU_TUNING),true)
+ifeq ($(KRAIT_TUNINGS),true)
   include $(BUILD_SYSTEM)/optimizations/tune.mk
 endif
 
