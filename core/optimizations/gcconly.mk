@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# GCC_OPTI
+# GCC_OPTIMIZATIONS
 ifndef LOCAL_IS_HOST_MODULE
 ifeq ($(LOCAL_CLANG),)
 ifneq (1,$(words $(filter $(LOCAL_DISABLE_GCCONLY), $(LOCAL_MODULE))))
@@ -36,7 +36,7 @@ endif
 endif
 
 LOCAL_DISABLE_GCCONLY := \
-    libopus\
+        libopus\
 	bluetooth.default \
 	libwebviewchromium \
 	libwebviewchromium_loader \
