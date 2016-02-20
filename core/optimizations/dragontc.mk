@@ -28,31 +28,12 @@ ifeq ($(LLVM_PREBUILTS_VERSION),3.7)
   POLLY += -mllvm -polly-no-early-exit
 endif
 
-ifeq ($(LLVM_PREBUILTS_VERSION),3.8)
+ifeq ($(filter $(LLVM_PREBUILTS_VERSION), 3.8 3.9),)
   POLLY += -mllvm -polly-position=after-loopopt
 endif
 
 # Disable modules that don't work with DragonTC. Split up by arch.
-DISABLE_DTC_arm := \
-  libLLVM \
-  libLLVMLinker \
-  libLLVMCodeGen \
-  libLLVMAnalysis \
-  libLLVMScalarOpts \
-  libLLVMCore \
-  libLLVMInstrumentation \
-  libLLVMipo \
-  libLLVMMC \
-  libLLVMSupport \
-  libLLVMTransformObjCARC \
-  libLLVMVectorize \
-  libgui \
-  libvixl \
-  libril \
-  libril_static \
-  librilutils_static \
-  libstagefright_soft_amrwbenc \
-  libstagefright_amrwbenc
+DISABLE_DTC_arm := libm
 DISABLE_DTC_arm64 :=
 
 # Set DISABLE_DTC based on arch
@@ -71,14 +52,27 @@ ENABLE_DTC := \
 
 # Disable modules that dont work with Polly. Split up by arch.
 DISABLE_POLLY_arm := \
-  libpng \
-  libF77blas \
-  libF77blasV8 \
-  libminivold_static \
-  libfuse \
-  libsparse \
-  libfuse_static 
+  libvixl
+
 DISABLE_POLLY_arm64 := \
+  libpng \
+  libfuse \
+  libfuse_static
+
+ifeq ($(LLVM_PREBUILTS_VERSION),3.8 3.9)
+  DISABLE_POLLY_arm += \
+	libLLVMARMCodeGen \
+	libLLVMAnalysis \
+	libLLVMScalarOpts \
+	libLLVMCore \
+	libLLVMInstrumentation \
+	libLLVMipo \
+	libLLVMMC \
+	libLLVMSupport \
+	libLLVMTransformObjCARC \
+	libLLVMVectorize \
+	libgui
+endif
 
 # Set DISABLE_POLLY based on arch
 DISABLE_POLLY := \
