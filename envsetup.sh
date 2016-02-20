@@ -37,8 +37,6 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - repopick: Utility to fetch changes from Gerrit.
 - installboot: Installs a boot.img to the connected device.
 - installrecovery: Installs a recovery.img to the connected device.
-- update: ProjectControl.
-- mota:  Generate OTA packages.
 
 Environemnt options:
 - SANITIZE_HOST: Set to 'true' to use ASAN for all host modules. Note that
@@ -2490,16 +2488,6 @@ do
     . $f
 done
 unset f
-
-# OTA Script
-function mota() {
-    $ANDROID_BUILD_TOP/build/tools/sm_ota_system/otadiff $1 $2 $3
-}
-
-# ProjectControl
-function update() {
-    $ANDROID_BUILD_TOP/build/UpdateProject $1
-}
 
 # Add completions
 check_bash_version && {

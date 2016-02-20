@@ -121,7 +121,7 @@ $(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb -Os -fomit-frame-pointer
 endif
 
 ifeq ($(strip $(STRICT_ALIASING)),true)
-$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS += -fstrict-aliasing -Wstrict-aliasing=3 -Werror=strict-aliasing
+$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS += -fstrict-aliasing -Wstrict-aliasing=3
 endif
 
 # Set FORCE_ARM_DEBUGGING to "true" in your buildspec.mk
