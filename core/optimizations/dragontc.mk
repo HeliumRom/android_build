@@ -29,7 +29,7 @@ ifeq ($(LLVM_PREBUILTS_VERSION),3.7)
 endif
 
 ifeq ($(filter $(LLVM_PREBUILTS_VERSION), 3.8 3.9),)
-  POLLY += -mllvm -polly-position=after-loopopt
+  POLLY += -mllvm -polly-opt-fusion=after-loopopt
 endif
 
 # Disable modules that don't work with DragonTC. Split up by arch.
