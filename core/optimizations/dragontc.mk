@@ -53,6 +53,8 @@ ENABLE_DTC := \
 # Disable modules that dont work with Polly. Split up by arch.
 DISABLE_POLLY_arm := \
   libvixl
+  libfuse \
+  libfuse_static
 
 DISABLE_POLLY_arm64 := \
   libpng \
