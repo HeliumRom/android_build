@@ -71,6 +71,7 @@ DISABLE_POLLY_arm := \
   libfuse_static \
   libF77blas \
   libF77blasV8 \
+  libblasV8 \
   libminivold_static \
   libsparse
 
