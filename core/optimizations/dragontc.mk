@@ -33,7 +33,20 @@ ifeq ($(filter $(LLVM_PREBUILTS_VERSION), 3.8 3.9),)
 endif
 
 # Disable modules that don't work with DragonTC. Split up by arch.
-DISABLE_DTC_arm := libm
+DISABLE_DTC_arm := \
+  libLLVM \
+  libLLVMLinker \
+  libLLVMARMCodeGen \
+  libLLVMCodeGen \
+  libLLVMAnalysis \
+  libLLVMScalarOpts \
+  libLLVMCore \
+  libLLVMInstrumentation \
+  libLLVMipo \
+  libLLVMMC \
+  libLLVMSupport \
+  libLLVMTransformObjCARC \
+  libLLVMVectorize \
 DISABLE_DTC_arm64 :=
 
 # Set DISABLE_DTC based on arch
@@ -65,16 +78,6 @@ DISABLE_POLLY_arm64 := \
 
 ifeq ($(LLVM_PREBUILTS_VERSION),3.8 3.9)
   DISABLE_POLLY_arm += \
-	libLLVMARMCodeGen \
-	libLLVMAnalysis \
-	libLLVMScalarOpts \
-	libLLVMCore \
-	libLLVMInstrumentation \
-	libLLVMipo \
-	libLLVMMC \
-	libLLVMSupport \
-	libLLVMTransformObjCARC \
-	libLLVMVectorize \
 	libgui
 endif
 
