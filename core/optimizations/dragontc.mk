@@ -69,12 +69,20 @@ DISABLE_POLLY_arm := \
   libpng \
   libfuse \
   libfuse_static \
+  libF77blas \
+  libF77blasV8 \
+  libminivold_static \
+  libsparse
 
 DISABLE_POLLY_arm64 := \
   libvixl \
   libpng \
   libfuse \
   libfuse_static \
+  libF77blas \
+  libF77blasV8 \
+  libminivold_static \
+  libsparse
 
 ifeq ($(LLVM_PREBUILTS_VERSION),3.8 3.9)
   DISABLE_POLLY_arm += \
