@@ -46,7 +46,20 @@ DISABLE_DTC_arm := \
   libLLVMMC \
   libLLVMSupport \
   libLLVMTransformObjCARC \
+  libLLVMTransformUtils \
   libLLVMVectorize \
+  libLLVMInstCombine \
+  libblasV8 \
+  libjni_latinime_common_static \
+  libRSSupport \
+  libstagefright_mpeg2ts \
+  libmediaplayerservice \
+  libblas \
+  sh \
+  libRS \
+  libtoybox \
+  libmksh \
+  libmksh_static
 DISABLE_DTC_arm64 :=
 
 # Set DISABLE_DTC based on arch
@@ -71,7 +84,6 @@ DISABLE_POLLY_arm := \
   libfuse_static \
   libF77blas \
   libF77blasV8 \
-  libblasV8 \
   libminivold_static \
   libsparse
 
