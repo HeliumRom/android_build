@@ -154,6 +154,7 @@ function setpaths()
     # defined in core/config.mk
     targetandgccversion=$(get_build_var TARGET_AND_GCC_VERSION)
     targetgccversion2=$(get_build_var 2ND_TARGET_GCC_VERSION)
+    targetlegacygccversion=$(get_build_var TARGET_LEGACY_GCC_VERSION)
     export TARGET_AND_GCC_VERSION=$targetandgccversion
 
     # defined in core/config.mk
@@ -507,12 +508,12 @@ function add_lunch_combo()
 }
 
 # add the default one here
-# add_lunch_combo aosp_arm-eng
-# add_lunch_combo aosp_arm64-eng
-# add_lunch_combo aosp_mips-eng
-# add_lunch_combo aosp_mips64-eng
-# add_lunch_combo aosp_x86-eng
-# add_lunch_combo aosp_x86_64-eng
+add_lunch_combo aosp_arm-eng
+add_lunch_combo aosp_arm64-eng
+add_lunch_combo aosp_mips-eng
+add_lunch_combo aosp_mips64-eng
+add_lunch_combo aosp_x86-eng
+add_lunch_combo aosp_x86_64-eng
 
 function print_lunch_menu()
 {
@@ -818,6 +819,7 @@ function gettop
             fi
         fi
     fi
+  export ANDROID_BUILD_TOP=$T
 }
 
 # Return driver for "make", if any (eg. static analyzer)
@@ -2186,10 +2188,10 @@ function repolastsync() {
 function reposync() {
     case `uname -s` in
         Darwin)
-            repo sync -j 4 "$@"
+            repo sync --force-sync -j 4 "$@"
             ;;
         *)
-            schedtool -B -n 1 -e ionice -n 1 `which repo` sync -j 4 "$@"
+            schedtool -B -n 1 -e ionice -n 1 `which repo` sync --force-sync -j 4 "$@"
             ;;
     esac
 }

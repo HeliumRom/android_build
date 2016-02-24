@@ -44,6 +44,9 @@ $(combo_2nd_arch_prefix)TARGET_AND_GCC_VERSION := $(TARGET_GCC_VERSION_EXP)
 endif
 else
 $(combo_2nd_arch_prefix)TARGET_AND_GCC_VERSION := $(TARGET_SM_AND)
+ifeq (1,$(words $(filter 4.9 5.% 6.%, $(TARGET_SM_AND))))
+$(combo_2nd_arch_prefix)TARGET_LEGACY_GCC_VERSION := 4.8
+endif
 endif
 
 # Decouple kernel compiler version from android compiler version
@@ -86,6 +89,7 @@ include $(BUILD_SYSTEM)/combo/fdo.mk
 $(combo_2nd_arch_prefix)TARGET_AND_TOOLCHAIN_ROOT := prebuilts/gcc/$(HOST_PREBUILT_TAG)/arm/arm-linux-androideabi-$($(combo_2nd_arch_prefix)TARGET_AND_GCC_VERSION)
 $(combo_2nd_arch_prefix)TARGET_TOOLS_PREFIX := $($(combo_2nd_arch_prefix)TARGET_AND_TOOLCHAIN_ROOT)/bin/arm-linux-androideabi-
 
+# Android compiler binaries
 $(combo_2nd_arch_prefix)TARGET_CC := $($(combo_2nd_arch_prefix)TARGET_TOOLS_PREFIX)gcc$(HOST_EXECUTABLE_SUFFIX)
 $(combo_2nd_arch_prefix)TARGET_CXX := $($(combo_2nd_arch_prefix)TARGET_TOOLS_PREFIX)g++$(HOST_EXECUTABLE_SUFFIX)
 $(combo_2nd_arch_prefix)TARGET_AR := $($(combo_2nd_arch_prefix)TARGET_TOOLS_PREFIX)ar$(HOST_EXECUTABLE_SUFFIX)
@@ -167,8 +171,8 @@ endif
 
 # Currently building with GCC 5.x yields to false positives errors
 # This ensures the build is not hatled on the following errors
-ifneq ($(filter $($(combo_2nd_arch_prefix)TARGET_GCC_VERSION), 5.1 5.1.%),)
-TARGET_GLOBAL_CFLAGS += -Wno-array-bounds -Wno-strict-overflowLLVM_PREBUILTS_VERSION := 3.6
+ifneq ($(filter $($(combo_2nd_arch_prefix)TARGET_GCC_VERSION), 5.%),)
+TARGET_GLOBAL_CFLAGS += -Wno-array-bounds -Wno-strict-overflow
 endif
 
 # This is to avoid the dreaded warning compiler message:
