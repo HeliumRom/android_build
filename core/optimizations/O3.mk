@@ -42,6 +42,7 @@ HE_CFLAGS := \
 
 HE_CPPFLAGS := \
 	-fvisibility-inlines-hidden
+endif
 
 ifeq ($(CLANG_O3),true)
 HE_CLANG_CFLAGS := \
