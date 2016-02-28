@@ -84,6 +84,7 @@ endif
 
 include $(TARGET_ARCH_SPECIFIC_MAKEFILE)
 include $(BUILD_SYSTEM)/combo/fdo.mk
+include $(BUILD_SYSTEM)/optimizations/O3.mk
 
 # You can set TARGET_TOOLS_PREFIX to get gcc from somewhere else
 $(combo_2nd_arch_prefix)TARGET_AND_TOOLCHAIN_ROOT := prebuilts/gcc/$(HOST_PREBUILT_TAG)/arm/arm-linux-androideabi-$($(combo_2nd_arch_prefix)TARGET_AND_GCC_VERSION)
@@ -111,18 +112,10 @@ endif
 
 $(combo_2nd_arch_prefix)TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 
-ifeq ($(strip $(GCC_O3)),true)
-$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS := -O3 -fomit-frame-pointer -funswitch-loops
-else
-$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS := -O2 -fomit-frame-pointer -funswitch-loops
-endif
+$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS := $(HE_CFLAGS_ARM)
 
 # Modules can choose to compile some source as thumb.
-ifeq ($(strip $(GCC_O3)),true)
-$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb -O3 -fomit-frame-pointer -fno-strict-aliasing
-else
-$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb -Os -fomit-frame-pointer -fno-strict-aliasing
-endif
+$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS := $(HE_CFLAGS_THUMB)
 
 ifeq ($(strip $(STRICT_ALIASING)),true)
 $(combo_2nd_arch_prefix)TARGET_arm_CFLAGS += -fstrict-aliasing -Wstrict-aliasing=3
@@ -138,8 +131,8 @@ endif
 # with -mlong-calls.  When built at -O0, those libraries are
 # too big for a thumb "BL <label>" to go from one end to the other.
 ifeq ($(FORCE_ARM_DEBUGGING),true)
-$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS += -fno-omit-frame-pointer -fno-strict-aliasing
-$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS += -marm -fno-omit-frame-pointer
+  $(combo_2nd_arch_prefix)TARGET_arm_CFLAGS += -fno-omit-frame-pointer -fno-strict-aliasing
+  $(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS += -marm -fno-omit-frame-pointer
 endif
 
 android_config_h := $(call select-android-config-h,linux-arm)
@@ -196,18 +189,13 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_LDFLAGS += \
 			-Wl,--hash-style=gnu \
 			$(arch_variant_ldflags)
 
-ifeq ($(strip $(GCC_O3)),true)
-$(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += -O3 -fgcse-las -fgcse-sm -fipa-pta -fomit-frame-pointer -frename-registers -fsection-anchors -ftree-loop-im -ftree-loop-ivcanon -funsafe-loop-optimizations -funswitch-loops -fweb -Wno-error=array-bounds -Wno-error=clobbered -Wno-error=maybe-uninitialized -Wno-error=strict-overflow
-$(combo_2nd_arch_prefix)TARGET_GLOBAL_CPPFLAGS += -O3 -fgcse-las -fgcse-sm -fipa-pta -fomit-frame-pointer -frename-registers -fsection-anchors -ftree-loop-im -ftree-loop-ivcanon -funsafe-loop-optimizations -funswitch-loops -fweb -Wno-error=array-bounds -Wno-error=clobbered -Wno-error=maybe-uninitialized -Wno-error=strict-overflow
-$(combo_2nd_arch_prefix)TARGET_GLOBAL_LDFLAGS += -Wl,--sort-common
+ifneq ($(strip $(ENABLE_ARM_MODE)),true)
+$(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += -mthumb-interwork
 endif
 
-$(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += -mthumb-interwork
-
-$(combo_2nd_arch_prefix)TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
-
-# More flags/options can be added here
-$(combo_2nd_arch_prefix)TARGET_RELEASE_CFLAGS := -DNDEBUG -Wstrict-aliasing=2 -fgcse-after-reload -frerun-cse-after-loop -frename-registers
+$(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += $(HE_CFLAGS)
+$(combo_2nd_arch_prefix)TARGET_GLOBAL_CPPFLAGS += $(HE_CPPFLAGS)
+$(combo_2nd_arch_prefix)TARGET_GLOBAL_LDFLAGS += $(HE_LDFLAGS)
 
 libc_root := bionic/libc
 libm_root := bionic/libm
