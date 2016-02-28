@@ -101,20 +101,26 @@ $(combo_2nd_arch_prefix)TARGET_STRIP := $($(combo_2nd_arch_prefix)TARGET_TOOLS_P
 # Compiler linkers
 $(combo_2nd_arch_prefix)TARGET_LD := $($(combo_2nd_arch_prefix)TARGET_TOOLS_PREFIX)ld$(HOST_EXECUTABLE_SUFFIX)
 ifeq ($(ENABLE_GOLD_LINKER),true)
-$(combo_2nd_arch_prefix)TARGET_LD := $($(combo_2nd_arch_prefix)TARGET_TOOLS_PREFIX)ld.gold$(HOST_EXECUTABLE_SUFFIX)
+  # The gold linker uses much less memory and greatly improves compile time of large projects.
+  $(combo_2nd_arch_prefix)TARGET_LD := $($(combo_2nd_arch_prefix)TARGET_TOOLS_PREFIX)ld.gold$(HOST_EXECUTABLE_SUFFIX)
 endif
 ifeq ($(ENABLE_BFD_LINKER),true)
-$(combo_2nd_arch_prefix)TARGET_LD := $($(combo_2nd_arch_prefix)TARGET_TOOLS_PREFIX)ld.bfd$(HOST_EXECUTABLE_SUFFIX)
+  # The bfd linker supports a much wider range of targets, but has little use in Android.
+  $(combo_2nd_arch_prefix)TARGET_LD := $($(combo_2nd_arch_prefix)TARGET_TOOLS_PREFIX)ld.bfd$(HOST_EXECUTABLE_SUFFIX)
 endif
 
 $(combo_2nd_arch_prefix)TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 
 ifeq ($(strip $(GCC_O3)),true)
-$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS := -O3 -DNDEBUG -pipe -fomit-frame-pointer -funswitch-loops -fno-tree-vectorize -fno-inline-functions -ffunction-sections -fdata-sections -frename-registers -fomit-frame-pointer -Wno-unused-parameter -Wno-unused-but-set-variable -Wno-maybe-uninitialized $(call cc-option,$(-fira-loop-pressure,-fforce-addr,-funsafe-loop-optimizations,-funroll-loops,-ftree-loop-distribution,-fsection-anchors,-ftree-loop-im,-ftree-loop-ivcanon,-ffunction-sections,-fgcse-after-reload,-fgcse-las,-fgcse-sm,-fweb,-ffp-contract=fast))
-$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb -Os -DNDEBUG -pipe -fomit-frame-pointer -fno-strict-aliasing -fno-tree-vectorize -fno-inline-functions -fno-unswitch-loops -ffunction-sections -fdata-sections -Wno-unused-parameter -Wno-unused-but-set-variable -Wno-maybe-uninitialized -Wno-clobbered -Wno-strict-overflow $(call cc-option,$(-funsafe-loop-optimizations,-funroll-loops,-ftree-loop-distribution,-fsection-anchors,-ftree-loop-im,-ftree-loop-ivcanon,-ffunction-sections,-frename-registers,-frerun-cse-after-loop,-fgcse-las,-fgcse-sm,-fweb,-ffp-contract=fast))
+$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS := -O3 -fomit-frame-pointer -funswitch-loops
 else
 $(combo_2nd_arch_prefix)TARGET_arm_CFLAGS := -O2 -fomit-frame-pointer -funswitch-loops
+endif
+
 # Modules can choose to compile some source as thumb.
+ifeq ($(strip $(GCC_O3)),true)
+$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb -O3 -fomit-frame-pointer -fno-strict-aliasing
+else
 $(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb -Os -fomit-frame-pointer -fno-strict-aliasing
 endif
 
@@ -190,16 +196,18 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_LDFLAGS += \
 			-Wl,--hash-style=gnu \
 			$(arch_variant_ldflags)
 
+ifeq ($(strip $(GCC_O3)),true)
+$(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += -O3 -fgcse-las -fgcse-sm -fipa-pta -fomit-frame-pointer -frename-registers -fsection-anchors -ftree-loop-im -ftree-loop-ivcanon -funsafe-loop-optimizations -funswitch-loops -fweb -Wno-error=array-bounds -Wno-error=clobbered -Wno-error=maybe-uninitialized -Wno-error=strict-overflow
+$(combo_2nd_arch_prefix)TARGET_GLOBAL_CPPFLAGS += -O3 -fgcse-las -fgcse-sm -fipa-pta -fomit-frame-pointer -frename-registers -fsection-anchors -ftree-loop-im -ftree-loop-ivcanon -funsafe-loop-optimizations -funswitch-loops -fweb -Wno-error=array-bounds -Wno-error=clobbered -Wno-error=maybe-uninitialized -Wno-error=strict-overflow
+$(combo_2nd_arch_prefix)TARGET_GLOBAL_LDFLAGS += -Wl,--sort-common
+endif
 
 $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += -mthumb-interwork
 
-ifeq ($(strip $(GCC_O3)),true)
-$(combo_2nd_arch_prefix)TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden -O3 -DNDEBUG -pipe -fivopts -ffunction-sections -fdata-sections -funswitch-loops -fomit-frame-pointer -ftracer -Wno-unused-parameter -Wno-unused-but-set-variable -Wno-maybe-uninitialized $(call cpp-option,$(-fira-loop-pressure,-fforce-addr,-funsafe-loop-optimizations,-funroll-loops,-ftree-loop-distribution,-fsection-anchors,-ftree-loop-im,-ftree-loop-ivcanon,-ffunction-sections,-fgcse-las,-fgcse-sm,-fweb,-ffp-contract=fast))
-$(combo_2nd_arch_prefix)TARGET_RELEASE_CFLAGS := -O3 -DNDEBUG -pipe -g -frerun-cse-after-loop -frename-registers -fno-strict-aliasing -fivopts -ffunction-sections -fdata-sections -funswitch-loops -fomit-frame-pointer -ftracer -Wno-unused-parameter -Wno-unused-but-set-variable -Wno-maybe-uninitialized $(call cc-option,$(-fira-loop-pressure,-fforce-addr,-funsafe-loop-optimizations,-funroll-loops,-ftree-loop-distribution,-fsection-anchors,-ftree-loop-im,-ftree-loop-ivcanon,-ffunction-sections,-fgcse-after-reload,-fgcse-las,-fgcse-sm,-fweb,-ffp-contract=fast))
-else
 $(combo_2nd_arch_prefix)TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
+
+# More flags/options can be added here
 $(combo_2nd_arch_prefix)TARGET_RELEASE_CFLAGS := -DNDEBUG -Wstrict-aliasing=2 -fgcse-after-reload -frerun-cse-after-loop -frename-registers
-endif
 
 libc_root := bionic/libc
 libm_root := bionic/libm
