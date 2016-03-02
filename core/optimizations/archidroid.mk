@@ -97,7 +97,7 @@ ARCHIDROID_CLANG_LDFLAGS := $(ARCHIDROID_GCC_LDFLAGS)
 ARCHIDROID_CLANG_UNKNOWN_FLAGS := \
   -mvectorize-with-neon-double \
   -mvectorize-with-neon-quad \
-  -fgcse-after-reload \repo sync kazhu
+  -fgcse-after-reload \
   -fgcse-las \
   -fgcse-sm \
   -fgraphite \
