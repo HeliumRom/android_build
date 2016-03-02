@@ -30,6 +30,10 @@
 # include defines, and compiler settings for the given architecture
 # version.
 #
+
+# ArchiDroid
+include $(BUILD_SYSTEM)/optimizations/archidroid.mk
+
 ifeq ($(strip $(TARGET_$(combo_2nd_arch_prefix)ARCH_VARIANT)),)
 TARGET_$(combo_2nd_arch_prefix)ARCH_VARIANT := armv5te
 endif
@@ -112,14 +116,14 @@ endif
 
 $(combo_2nd_arch_prefix)TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 
-$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS :=    -O2 \
+$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS :=    $(ARCHIDROID_GCC_CFLAGS_ARM) \
                         -fomit-frame-pointer \
                         -fstrict-aliasing    \
                         -funswitch-loops
 
 # Modules can choose to compile some source as thumb.
 $(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb \
-                        -Os \
+                        $(ARCHIDROID_GCC_CFLAGS_THUMB) \
                         -fomit-frame-pointer \
                         -fno-strict-aliasing
 
@@ -202,6 +206,11 @@ $(combo_2nd_arch_prefix)TARGET_RELEASE_CFLAGS := \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \
 			-frename-registers
+
+$(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += $(ARCHIDROID_GCC_CFLAGS)
+$(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += $(ARCHIDROID_GCC_CFLAGS_32)
+$(combo_2nd_arch_prefix)TARGET_GLOBAL_CPPFLAGS += $(ARCHIDROID_GCC_CPPFLAGS)
+$(combo_2nd_arch_prefix)TARGET_GLOBAL_LDFLAGS += $(ARCHIDROID_GCC_LDFLAGS)
 
 libc_root := bionic/libc
 libm_root := bionic/libm

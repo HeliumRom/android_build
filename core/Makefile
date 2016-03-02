@@ -1,5 +1,8 @@
 # Put some miscellaneous rules here
 
+# ArchiDroid
+include $(BUILD_SYSTEM)/optimizations/archidroid.mk
+
 # Build system colors
 
 ifneq ($(BUILD_WITH_COLORS),0)

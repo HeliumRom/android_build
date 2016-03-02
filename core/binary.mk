@@ -33,6 +33,9 @@ endif
 #####################################
 ### Begin HeliumRom optimizations ###
 #####################################
+# ArchiDroid
+include $(BUILD_SYSTEM)/optimizations/archidroid.mk
+
 # DragonTC Optimizations
 ifeq ($(USE_DTC),true)
   include $(BUILD_SYSTEM)/optimizations/dragontc.mk
