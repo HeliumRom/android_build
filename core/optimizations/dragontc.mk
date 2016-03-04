@@ -53,13 +53,16 @@ DISABLE_DTC_arm := \
   libjni_latinime_common_static \
   libRSSupport \
   libstagefright_mpeg2ts \
+  libstagefright_amrwbenc \
+  libstagefright_soft_amrwbenc \
   libmediaplayerservice \
   libblas \
   sh \
   libRS \
   libtoybox \
   libmksh \
-  libmksh_static
+  libmksh_static \
+  installd
 DISABLE_DTC_arm64 :=
 
 # Set DISABLE_DTC based on arch
