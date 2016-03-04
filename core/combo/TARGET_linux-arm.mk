@@ -88,7 +88,6 @@ endif
 
 include $(TARGET_ARCH_SPECIFIC_MAKEFILE)
 include $(BUILD_SYSTEM)/combo/fdo.mk
-include $(BUILD_SYSTEM)/optimizations/O3.mk
 
 # You can set TARGET_TOOLS_PREFIX to get gcc from somewhere else
 $(combo_2nd_arch_prefix)TARGET_AND_TOOLCHAIN_ROOT := prebuilts/gcc/$(HOST_PREBUILT_TAG)/arm/arm-linux-androideabi-$($(combo_2nd_arch_prefix)TARGET_AND_GCC_VERSION)
