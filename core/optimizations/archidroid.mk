@@ -22,7 +22,7 @@
 #######################
 ### GENERAL SECTION ###
 #######################
-ifneq ($(DISABLE_ARCHIDROID),true)
+ifeq ($(ENABLE_ARCHIDROID),true)
 # General optimization level
 ARCHIDROID_GCC_CFLAGS_OPTI := -O3
 
@@ -64,7 +64,9 @@ ARCHIDROID_GCC_CFLAGS_64 :=
 # ARCHIDROID_GCC_CFLAGS += -ftracer -funroll-loops
 
 # These flags may cause ICEs in some compilers, but work fine in other ones, test carefully
-# ARCHIDROID_GCC_CFLAGS += -fgraphite -fgraphite-identity
+ifeq ($(ENABLE_ARCHIDROID_GRAPHITE),true)
+ARCHIDROID_GCC_CFLAGS += -fgraphite -fgraphite-identity
+endif
 
 # The following flags (-floop) require that your GCC has been configured --with-isl
 # Additionally, applying any of them will most likely cause ICE in your compiler, so they're disabled
