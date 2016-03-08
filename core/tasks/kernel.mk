@@ -12,9 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 # Android makefile to build kernel as a part of Android Build
-<<<<<<< HEAD
 $(info   -------------------------------------------------------)
 $(info   ---------------- KERNEL.MK START ----------------------)
 $(info   -------------------------------------------------------)
