@@ -1,4 +1,4 @@
-# Copyright (C) 2015 DragonTC
+# Copyright (C) 2015-2016 DragonTC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,54 +16,30 @@
 POLLY := -mllvm -polly \
   -mllvm -polly-parallel -lgomp \
   -mllvm -polly-parallel-force \
-  -mllvm -polly-allow-nonaffine=1\
-  -mllvm -polly-ast-detect-parallel \
+  -mllvm -polly-ast-use-context \
   -mllvm -polly-vectorizer=polly \
   -mllvm -polly-opt-fusion=max \
   -mllvm -polly-opt-maximize-bands=yes \
   -mllvm -polly-run-dce
 
 # Enable version specific Polly flags.
-ifeq ($(LLVM_PREBUILTS_VERSION),3.7)
+ifeq (1,$(words $(filter 3.7 3.8 3.9,$(LLVM_PREBUILTS_VERSION))))
+  POLLY += -mllvm -polly-dependences-computeout=0 \
+    -mllvm -polly-dependences-analysis-type=value-based
+endif
+ifeq (1,$(words $(filter 3.8 3.9,$(LLVM_PREBUILTS_VERSION))))
+  POLLY += -mllvm -polly-position=after-loopopt \
+    -mllvm -polly-run-inliner \
+    -mllvm -polly-detect-keep-going \
+    -mllvm -polly-rtc-max-arrays-per-group=40 \
+    -mllvm -polly-register-tiling
+else
   POLLY += -mllvm -polly-no-early-exit
 endif
 
-ifeq ($(filter $(LLVM_PREBUILTS_VERSION), 3.8 3.9),)
-  POLLY += -mllvm -polly-opt-fusion=after-loopopt
-endif
-
 # Disable modules that don't work with DragonTC. Split up by arch.
-DISABLE_DTC_arm := \
-  libLLVM \
-  libLLVMLinker \
-  libLLVMARMCodeGen \
-  libLLVMCodeGen \
-  libLLVMAnalysis \
-  libLLVMScalarOpts \
-  libLLVMCore \
-  libLLVMInstrumentation \
-  libLLVMipo \
-  libLLVMMC \
-  libLLVMSupport \
-  libLLVMTransformObjCARC \
-  libLLVMTransformUtils \
-  libLLVMVectorize \
-  libLLVMInstCombine \
-  libblasV8 \
-  libjni_latinime_common_static \
-  libRSSupport \
-  libstagefright_mpeg2ts \
-  libstagefright_amrwbenc \
-  libstagefright_soft_amrwbenc \
-  libmediaplayerservice \
-  libblas \
-  sh \
-  libRS \
-  libtoybox \
-  libmksh \
-  libmksh_static \
-  installd
-DISABLE_DTC_arm64 :=
+DISABLE_DTC_arm := v8_mksnapshot.arm
+DISABLE_DTC_arm64 := libm v8_mksnapshot.arm64
 
 # Set DISABLE_DTC based on arch
 DISABLE_DTC := \
@@ -81,28 +57,58 @@ ENABLE_DTC := \
 
 # Disable modules that dont work with Polly. Split up by arch.
 DISABLE_POLLY_arm := \
-  libvixl \
   libpng \
-  libfuse \
-  libfuse_static \
+  libLLVMCodeGen \
+  libLLVMARMCodeGen\
+  libLLVMScalarOpts \
+  libLLVMSupport \
+  libLLVMMC \
+  libminui \
   libF77blas \
   libF77blasV8 \
-  libminivold_static \
-  libsparse
+  libRSCpuRef \
+  libRS	\
+  libRSDriver\
+  libRSSupport \
+  libmedia \
+  libjni_latinime_common_static \
+  libvterm \
+  libxml2 \
+  libstagefright_amrwbenc \
+  libstagefright_soft_amrwbenc
 
 DISABLE_POLLY_arm64 := \
-  libvixl \
   libpng \
   libfuse \
-  libfuse_static \
+  libLLVMAsmParser \
+  libLLVMBitReader \
+  libLLVMCodeGen \
+  libLLVMInstCombine \
+  libLLVMMCParser \
+  libLLVMSupport \
+  libLLVMSelectionDAG \
+  libLLVMTransformUtils \
   libF77blas \
-  libF77blasV8 \
-  libminivold_static \
-  libsparse
+  libbccSupport \
+  libblas \
+  libRS \
+  libstagefright_mpeg2ts \
+  bcc_strip_attr 
 
-ifeq ($(LLVM_PREBUILTS_VERSION),3.8 3.9)
-  DISABLE_POLLY_arm += \
-	libgui
+# Add version specific disables.
+ifeq (1,$(words $(filter 3.8 3.9,$(LLVM_PREBUILTS_VERSION))))
+  DISABLE_POLLY_arm64 += \
+	libLLVMAnalysis \
+	libLLVMCore \
+	libLLVMInstrumentation \
+	libLLVMipo \
+	libLLVMMC \
+	libLLVMTransformObjCARC \
+	libLLVMVectorize \
+	libgui \
+	libandroid_runtime \
+	libunwind_llvm \
+	libvixl
 endif
 
 # Set DISABLE_POLLY based on arch
@@ -111,38 +117,36 @@ DISABLE_POLLY := \
   $(DISABLE_DTC) \
   $(LOCAL_DISABLE_POLLY)
 
-# Include ARM Mode if requested
-ifeq ($(ARM_MODE),true)
-  include $(BUILD_SYSTEM)/optimizations/arm.mk
+# Enable DragonTC on current module if requested.
+ifeq (1,$(words $(filter $(ENABLE_DTC),$(LOCAL_MODULE))))
+  my_cc := $(CLANG)
+  my_cxx := $(CLANG_CXX)
+  my_clang := true
 endif
 
-# Make sure that the current module is not blacklisted. Polly is not
-# used on host modules to reduce build time and unnecessary hassle.
-# Optimizations on host do not affect ROM performance anyways.
-ifneq (,$(filter true,$(LOCAL_CLANG)))
+ifeq ($(my_clang),true)
+  # Disable DragonTC on current module if requested.
   ifeq (1,$(words $(filter $(DISABLE_DTC),$(LOCAL_MODULE))))
     my_cc := $(AOSP_CLANG)
     my_cxx := $(AOSP_CLANG_CXX)
-  endif
-  ifndef LOCAL_IS_HOST_MODULE
-    ifneq (1,$(words $(filter $(DISABLE_POLLY),$(LOCAL_MODULE))))
-      ifdef LOCAL_CFLAGS
-        LOCAL_CFLAGS += -O3 $(POLLY)
-      else
-        LOCAL_CFLAGS := -O3 $(POLLY)
-      endif
+    ifeq ($(HOST_OS),darwin)
+      # Darwin is really bad at dealing with idiv/sdiv. Don't use krait on Darwin.
+      CLANG_CONFIG_arm_EXTRA_CFLAGS += -mcpu=cortex-a9
     else
-      ifdef LOCAL_CFLAGS
-        LOCAL_CFLAGS += -O2
-      else
-        LOCAL_CFLAGS := -O2
-      endif
+      CLANG_CONFIG_arm_EXTRA_CFLAGS += -mcpu=krait
     endif
+  else
+    CLANG_CONFIG_arm_EXTRA_CFLAGS += -mcpu=krait2
   endif
-else
-  ifeq (1,$(words $(filter $(ENABLE_DTC),$(LOCAL_MODULE))))
-    my_cc := $(CLANG)
-    my_cxx := $(CLANG_CXX)
-    my_clang := true
+  # Host modules are not optimized to improve compile time.
+  ifndef LOCAL_IS_HOST_MODULE
+    # Filter flags to reduce conflicts and commandline argument size
+    my_cflags :=  $(filter-out -Wall -Werror -g -O3 -O2 -Os -O1 -O0 -Og -Oz,$(my_cflags))
+    # Enable -O3 and Polly if not blacklisted, otherwise use -O3.
+    ifneq (1,$(words $(filter $(DISABLE_POLLY),$(LOCAL_MODULE))))
+      my_cflags += -O3 $(POLLY)
+    else
+      my_cflags += -O3
+    endif
   endif
 endif
