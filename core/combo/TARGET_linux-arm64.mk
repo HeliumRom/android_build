@@ -32,7 +32,7 @@
 #
 
 # ArchiDroid
-include $(BUILD_SYSTEM)/archidroid.mk
+include $(BUILD_SYSTEM)/optimizations/archidroid.mk
 
 ifeq ($(strip $(TARGET_ARCH_VARIANT)),)
 TARGET_ARCH_VARIANT := armv8
