@@ -58,7 +58,6 @@ GCC_ONLY := \
 	-fgcse-sm \
 	-fweb \
 	-ffp-contract=fast \
-	-mvectorize-with-neon-quad \
 	-funswitch-loops \
 	-fpredictive-commoning \
 	-fgcse-after-reload \
@@ -82,7 +81,6 @@ GCC_ONLY := \
 	-fgcse-sm \
 	-fweb \
 	-ffp-contract=fast \
-	-mvectorize-with-neon-quad \
 	-funswitch-loops \
 	-fpredictive-commoning \
 	-fgcse-after-reload \
